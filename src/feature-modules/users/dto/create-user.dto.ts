@@ -13,7 +13,7 @@ export class CreateUserDto {
   @IsNotEmpty()
   @IsString()
   @Length(8, 100)
-  password: string;
+  passwordHash: string;
 
   @IsOptional()
   @IsString()

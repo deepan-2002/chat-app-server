@@ -51,7 +51,6 @@ export class User {
 
     @BeforeInsert()
     async hashPassword() {
-        console.log('Password before hashing:', this.passwordHash);
         if (this.passwordHash) {
             const saltRounds = 12;
             this.passwordHash = await bcrypt.hash(this.passwordHash, saltRounds);
