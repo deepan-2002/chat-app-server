@@ -3,6 +3,13 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { UsersModule } from './feature-modules/users/users.module';
+import { ConversationsModule } from './feature-modules/conversations/conversations.module';
+import { ConversationParticipantModule } from './feature-modules/conversation-participant/conversation-participant.module';
+import { MessagesModule } from './feature-modules/messages/messages.module';
+import { AiConversationsModule } from './feature-modules/ai-conversations/ai-conversations.module';
+import { AiMessagesModule } from './feature-modules/ai-messages/ai-messages.module';
+import { UserKeysModule } from './feature-modules/user-keys/user-keys.module';
 
 @Module({
   imports: [
@@ -22,7 +29,14 @@ import { TypeOrmModule } from '@nestjs/typeorm';
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
         synchronize: process.env.NODE_ENV !== 'production',
       })
-    }),],
+    }),
+    UsersModule,
+    ConversationsModule,
+    ConversationParticipantModule,
+    MessagesModule,
+    AiConversationsModule,
+    AiMessagesModule,
+    UserKeysModule,],
   controllers: [AppController],
   providers: [AppService],
 })
