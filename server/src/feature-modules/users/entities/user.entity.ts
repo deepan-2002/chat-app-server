@@ -2,7 +2,8 @@ import { AiConversation } from 'src/feature-modules/ai-conversations/entities/ai
 import { ConversationParticipant } from 'src/feature-modules/conversation-participant/entities/conversation-participant.entity';
 import { Message } from 'src/feature-modules/messages/entities/message.entity';
 import { UserKey } from 'src/feature-modules/user-keys/entities/user-key.entity';
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany, CreateDateColumn, UpdateDateColumn, BeforeInsert } from 'typeorm';
+import * as bcrypt from 'bcrypt';
 
 @Entity('users')
 export class User {
@@ -47,4 +48,17 @@ export class User {
 
     @OneToMany(() => UserKey, userKey => userKey.user)
     userKeys: UserKey[];
+
+    @BeforeInsert()
+    async hashPassword() {
+        console.log('Password before hashing:', this.passwordHash);
+        if (this.passwordHash) {
+            const saltRounds = 12;
+            this.passwordHash = await bcrypt.hash(this.passwordHash, saltRounds);
+        }
+    }
+
+    async validatePassword(plainPassword: string) {
+        return await bcrypt.compare(plainPassword, this.passwordHash);
+    }
 }
