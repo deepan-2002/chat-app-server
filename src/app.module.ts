@@ -10,6 +10,7 @@ import { MessagesModule } from './feature-modules/messages/messages.module';
 import { AiConversationsModule } from './feature-modules/ai-conversations/ai-conversations.module';
 import { AiMessagesModule } from './feature-modules/ai-messages/ai-messages.module';
 import { UserKeysModule } from './feature-modules/user-keys/user-keys.module';
+import { AuthModule } from './feature-modules/auth/auth.module';
 
 @Module({
   imports: [
@@ -36,7 +37,8 @@ import { UserKeysModule } from './feature-modules/user-keys/user-keys.module';
     MessagesModule,
     AiConversationsModule,
     AiMessagesModule,
-    UserKeysModule,],
+    UserKeysModule,
+    AuthModule,],
   controllers: [AppController],
   providers: [AppService],
 })
