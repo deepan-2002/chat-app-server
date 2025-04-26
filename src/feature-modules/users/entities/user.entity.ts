@@ -49,6 +49,12 @@ export class User {
     @OneToMany(() => UserKey, userKey => userKey.user)
     userKeys: UserKey[];
 
+    @Column({ type: 'text' })
+    name: string;
+
+    @Column({ type: 'boolean' })
+    is_verified: boolean;
+
     @BeforeInsert()
     async hashPassword() {
         if (this.passwordHash) {
