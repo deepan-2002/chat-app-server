@@ -1,4 +1,4 @@
-import { ConflictException, Injectable, InternalServerErrorException } from '@nestjs/common';
+import { ConflictException, Injectable, InternalServerErrorException, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
@@ -42,6 +42,15 @@ export class UsersService {
 
   async findByUsername(username: string): Promise<User> {
     return await this.usersRepository.findOne({ where: { username } });
+  }
+
+  async getProfile(user: { username: string }): Promise<User> {
+    if (!user.username) {
+      throw new NotFoundException();
+    }
+    const userData = await this.findByUsername(user.username);
+    delete userData.passwordHash;
+    return userData;
   }
 
 }
