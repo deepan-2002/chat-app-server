@@ -11,6 +11,8 @@ import { AiConversationsModule } from './feature-modules/ai-conversations/ai-con
 import { AiMessagesModule } from './feature-modules/ai-messages/ai-messages.module';
 import { UserKeysModule } from './feature-modules/user-keys/user-keys.module';
 import { AuthModule } from './feature-modules/auth/auth.module';
+import { APP_GUARD } from '@nestjs/core';
+import { AuthGuard } from './feature-modules/auth/guard/auth.guard';
 
 @Module({
   imports: [
@@ -40,6 +42,11 @@ import { AuthModule } from './feature-modules/auth/auth.module';
     UserKeysModule,
     AuthModule,],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService,
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard
+    }
+  ],
 })
 export class AppModule { }
