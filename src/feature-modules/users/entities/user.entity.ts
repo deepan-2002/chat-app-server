@@ -56,8 +56,4 @@ export class User {
             this.passwordHash = await bcrypt.hash(this.passwordHash, saltRounds);
         }
     }
-
-    async validatePassword(plainPassword: string) {
-        return await bcrypt.compare(plainPassword, this.passwordHash);
-    }
 }
