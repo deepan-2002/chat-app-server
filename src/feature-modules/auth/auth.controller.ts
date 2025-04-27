@@ -18,4 +18,14 @@ export class AuthController {
   login(@Body() loginDto: LoginDto) {
     return this.authService.login(loginDto)
   }
+
+  @Post("send-otp")
+  sendOtp(@Body('email') email: string) {
+    return this.authService.sendOtp(email);
+  }
+
+  @Post("verify-otp")
+  verifyOtp(@Body() body: { email: string, otp: string }) {
+    return this.authService.verifyOtp(body);
+  }
 }

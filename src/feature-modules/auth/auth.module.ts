@@ -7,6 +7,8 @@ import { User } from '../users/entities/user.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { OtpService } from './mail/otp.service';
+import { MailService } from './mail/mail.service';
 
 @Module({
   imports: [UsersModule,
@@ -22,6 +24,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     })
   ],
   controllers: [AuthController],
-  providers: [AuthService, UsersService],
+  providers: [AuthService, UsersService, OtpService, MailService],
 })
 export class AuthModule { }

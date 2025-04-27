@@ -3,6 +3,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -51,6 +52,14 @@ export class UsersService {
     const userData = await this.findByUsername(user.username);
     delete userData.passwordHash;
     return userData;
+  }
+
+  async verifyUser(email: string) {
+    const user = await this.findByEmail(email);
+    Object.assign(user, { is_verified: true })
+    console.log(user);
+    const { passwordHash, ...updatedUser } = await this.usersRepository.save(user);
+    return updatedUser;
   }
 
 }
