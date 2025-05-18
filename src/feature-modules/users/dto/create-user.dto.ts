@@ -1,4 +1,5 @@
-import { IsEmail, IsNotEmpty, IsString, Length, IsOptional } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsString, Length, IsOptional, IsBoolean } from 'class-validator';
+import { Column } from 'typeorm';
 
 export class CreateUserDto {
   @IsNotEmpty()
@@ -22,4 +23,11 @@ export class CreateUserDto {
   @IsOptional()
   @IsString()
   avatarUrl?: string;
+
+  @IsOptional()
+  @IsBoolean()
+  is_verified?: boolean;
+
+  @IsString()
+  name:string;
 }

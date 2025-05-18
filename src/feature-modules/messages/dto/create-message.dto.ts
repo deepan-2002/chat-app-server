@@ -6,6 +6,10 @@ export class CreateMessageDto {
     conversationId: string;
 
     @IsNotEmpty()
+    @IsUUID('4')
+    senderId: string;
+
+    @IsNotEmpty()
     @IsString()
     content: string;
 

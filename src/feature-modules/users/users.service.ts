@@ -14,7 +14,7 @@ export class UsersService {
 
   async create(createUserDto: CreateUserDto): Promise<User> {
     const { email, username } = createUserDto;
-
+    createUserDto.is_verified = false;
     const emailExisting = await this.findByEmail(email);
     if (emailExisting) {
       throw new ConflictException("Email Already Exists");
@@ -26,12 +26,12 @@ export class UsersService {
     }
 
     const user = this.usersRepository.create(createUserDto);
-
     try {
       await this.usersRepository.save(user);
       delete user.passwordHash;
       return user;
-    } catch {
+    } catch (err) {
+      console.log(err);
       throw new InternalServerErrorException('Error Creating User');
     }
 
@@ -57,7 +57,6 @@ export class UsersService {
   async verifyUser(email: string) {
     const user = await this.findByEmail(email);
     Object.assign(user, { is_verified: true })
-    console.log(user);
     const { passwordHash, ...updatedUser } = await this.usersRepository.save(user);
     return updatedUser;
   }

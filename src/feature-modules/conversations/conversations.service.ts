@@ -1,26 +1,34 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { CreateConversationDto } from './dto/create-conversation.dto';
-import { UpdateConversationDto } from './dto/update-conversation.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Conversation } from './entities/conversation.entity';
+import { Repository } from 'typeorm';
+import { ConversationParticipantService } from '../conversation-participant/conversation-participant.service';
 
 @Injectable()
 export class ConversationsService {
-  create(createConversationDto: CreateConversationDto) {
-    return 'This action adds a new conversation';
+  constructor(
+    @InjectRepository(Conversation)
+    private readonly conversationRepository: Repository<Conversation>,
+    private readonly conversationParticipantService: ConversationParticipantService,
+  ) { }
+
+  async create(createConversationDto: CreateConversationDto) {
+    const { participantIds } = createConversationDto;
+    const conversation = this.conversationRepository.create(createConversationDto);
+    await this.conversationRepository.save(conversation);
+    const { id } = conversation;
+    for (const participantId of participantIds) {
+      await this.conversationParticipantService.create({ conversationId: id, userId: participantId });
+    }
+    return conversation;
   }
 
-  findAll() {
-    return `This action returns all conversations`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} conversation`;
-  }
-
-  update(id: number, updateConversationDto: UpdateConversationDto) {
-    return `This action updates a #${id} conversation`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} conversation`;
+  async getAll() {
+    const conversation = await this.conversationRepository.findAndCount();
+    if (!conversation) {
+      throw new NotFoundException("Conversations Not Found");
+    }
+    return conversation;
   }
 }

@@ -31,6 +31,7 @@ export class AuthService {
         if (!isValid) {
             throw new UnauthorizedException("Incorrect Password");
         }
+        console.log(user);
         if (!user.is_verified) {
             return this.sendOtp(user.email);
         }
@@ -51,10 +52,10 @@ export class AuthService {
         return { message: 'OTP sent' };
     }
 
-    async verifyOtp(body: { email: string; otp: string }) {
-        const isValid = this.otpService.verifyOtp(body.email, body.otp);
+    async verifyOtp({ email, otp }: { email: string; otp: string }) {
+        const isValid = this.otpService.verifyOtp(email, otp);
         if (!isValid) return { message: 'Invalid or expired OTP' };
-        return { message: 'User verified' };
+        return await this.usersService.verifyUser(email);
     }
 
 }
